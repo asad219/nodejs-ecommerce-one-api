@@ -9,6 +9,7 @@ const contactSchema = mongoose.Schema({
     },
     countInStock: {
         type: Number,
+        required: true
     },
 });
 module.exports = mongoose.model("Product", contactSchema);
