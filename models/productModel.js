@@ -55,4 +55,4 @@ const productSchema = mongoose.Schema({
         default: Date.now,
     },
 });
-module.exports = mongoose.model("Product", contactSchema);
+module.exports = mongoose.model("Product", productSchema);

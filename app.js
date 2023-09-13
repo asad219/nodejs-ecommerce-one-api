@@ -5,6 +5,7 @@ const morgan = require("morgan");
 
 
 const category = require('./routes/categoryRouter');
+const product = require('./routes/prouductRouter');
 
 const app = express();
 const port = process.env.PORT;
@@ -23,5 +24,9 @@ app.use(bodyParser.json());
 app.use(morgan('tiny'));
 
 
-//routes
+//#####routes
+//Category
 app.use(`${api}/category`, category);
+
+//Product
+app.use(`${api}/product`, product);
