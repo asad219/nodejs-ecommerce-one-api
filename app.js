@@ -6,6 +6,7 @@ const morgan = require("morgan");
 
 const category = require('./routes/categoryRouter');
 const product = require('./routes/prouductRouter');
+const order = require('./routes/orderRouter');
 
 const app = express();
 const port = process.env.PORT;
@@ -30,3 +31,6 @@ app.use(`${api}/category`, category);
 
 //Product
 app.use(`${api}/product`, product);
+
+//Order
+app.use(`${api}/order`, order);
