@@ -34,7 +34,7 @@ const createCategory = asyncHandler(async (req, res) => {
         color,
         image,
     });
-    if (category) 
+    if (!category) 
     return res.status(400).json({message: "Oops! something went wrong, please check administrator"});
     
     res.send(category);
