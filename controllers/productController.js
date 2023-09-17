@@ -147,13 +147,14 @@ const deleteProduct = asyncHandler(async (req, res) => {
 });
 //Get Product Count
 const getProductCount = asyncHandler(async(req, res)=>{
-    const productCount = await Product.countDocuments();
-    if (!productCount){
-        return res.status(500).json({success: false})
-    }else
-    {
-        res.send(productCount);
-    }
+    // const productCount = await Product.countDocuments();
+    // if (!productCount){
+    //     return res.status(500).json({success: false})
+    // }else
+    // {
+    //     res.send(productCount);
+    // }
+    res.status(200).json({message: "Product count api"});
     
 })
 //Get Featured Product
