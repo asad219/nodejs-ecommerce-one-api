@@ -1,12 +1,13 @@
 const express = require("express");
 const asyncHandler = require('express-async-handler');
 const router = express.Router();
-const { getOrders, createOrder } = require('../controllers/orderController')
+const { getOrders, getOrdersById, createOrder } = require('../controllers/orderController')
 const validateToken = require('../middleware/validateToken');
 
 //Get Order
-router.get('/', getOrders);
-router.post('/', createOrder)
+router.get('/', validateToken, getOrders);
+router.get('/:id', validateToken, getOrdersById);
+router.post('/', validateToken, createOrder)
 
 
 
