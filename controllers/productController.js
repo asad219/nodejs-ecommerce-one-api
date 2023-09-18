@@ -6,6 +6,7 @@ const mongoose = require("mongoose");
 
 //Get All Products
 const getAllProducts = asyncHandler(async (req, res) => {
+        
     //Select all products (populate with category data)
     //const productList = await Product.find().populate('category');
 
@@ -32,6 +33,9 @@ const getProduct = asyncHandler(async (req, res) => {
 });
 //Create Products
 const createProduct = asyncHandler(async (req, res) => {
+    const isAdmin = req.user.isAdmin;
+    if (!isAdmin)
+    res.send(401).json({message: "Unauthorized Access"});
     const {
         name,
         description,
@@ -91,6 +95,9 @@ const createProduct = asyncHandler(async (req, res) => {
 });
 //Update product
 const updateProduct = asyncHandler(async (req, res) => {
+    const isAdmin = req.user.isAdmin;
+    if (!isAdmin)
+    res.send(401).json({message: "Unauthorized Access"});
     if(!mongoose.isValidObjectId(req.params.id)){
         return res.status(500).json({Error: "Invalid ID format"});
     }
@@ -132,6 +139,9 @@ const updateProduct = asyncHandler(async (req, res) => {
 });
 //Delete product
 const deleteProduct = asyncHandler(async (req, res) => {
+    const isAdmin = req.user.isAdmin;
+    if (!isAdmin)
+    res.send(401).json({message: "Unauthorized Access"});
     await Product.findById(req.params.id).then(async (product) => {
         if (product) {
             await Product.findByIdAndRemove(req.params.id);
