@@ -15,8 +15,8 @@ const getAllProducts = asyncHandler(async (req, res) => {
 
     //Select specific columns witho _id field
     const productList = await Product.find()
-        .populate("category")
-        .select("name description image images isFeatured");
+        .populate('category', 'name color')
+        .select("name description image images isFeatured price");
 
     if (!productList) return res.status(500).json({ message: "No products" });
 
