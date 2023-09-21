@@ -4,6 +4,11 @@ const Category = require("../models/categoryModel");
 const asyncHandler = require("express-async-handler");
 const mongoose = require("mongoose");
 
+const prod = asyncHandler(async(req, res)=>{
+    const id = req.params.id;
+    return res.status(200).json({ message: id });
+})
+
 //Get All Products
 const getAllProducts = asyncHandler(async (req, res) => {
         
@@ -205,5 +210,6 @@ module.exports = {
     deleteProduct,
     getProductCount,
     getFeaturedProduct,
-    getFilterProducts
+    getFilterProducts,
+    prod
 };
