@@ -4,21 +4,21 @@ const bodyParser = require("body-parser");
 const morgan = require("morgan");
 const errorHandler = require('./middleware/errorHandler');
 
-
 const category = require('./routes/categoryRouter');
 const product = require('./routes/prouductRouter');
 const order = require('./routes/orderRouter');
 const user = require('./routes/userRoute');
 
+const connectDb = require("./config/dbConnection");
+
 const app = express();
-const port = process.env.PORT;
+const port = process.env.PORT || 8000;
 app.listen(port, () => {
     console.log(`Server started on port ${port}, http://localhost:${port}`);
 });
 const api = process.env.API_URL;
 
 //Connect to database
-const connectDb = require("./config/dbConnection");
 connectDb();
 
 //middleware
