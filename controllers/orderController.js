@@ -68,6 +68,19 @@ const createOrder = asyncHandler(async (req, res) => {
     );
     const orderItemsIdsResolved = await orderItemsIds;
 
+    const totalPrices = await Promise.all(
+        orderItemsIdsResolved.map(async (orderItemId) => {
+            const orderItem = await OrderItem.findById(orderItemId).populate(
+                "product",
+                "price",
+            );
+            const totalPrice = orderItem.product.price * orderItem.quantity;
+            return totalPrice;
+        }),
+    );
+
+    const _totalPrice = totalPrices.reduce((a, b) => a + b, 0);
+
     const {
         orderItems,
         shippingAddress1,
@@ -90,7 +103,7 @@ const createOrder = asyncHandler(async (req, res) => {
         country,
         phone,
         status,
-        totalPrice,
+        totalPrice: _totalPrice,
         user: userId,
     });
 
@@ -101,4 +114,55 @@ const createOrder = asyncHandler(async (req, res) => {
 
     res.send(order);
 });
-module.exports = { getOrders, getOrdersById, createOrder };
+
+//Update order status
+const updateOrderStatus = asyncHandler(async (req, res) => {
+    if (!req.user.isAdmin) {
+        return res.status(400).json({ message: "Unauthorized access" });
+    } else {
+        const order = await Order.findByIdAndUpdate(
+            req.params.id,
+            {
+                status: req.body.status,
+            },
+            { new: true },
+        ).then((order) => {
+            if (!order)
+                return res.status(400).json({ message: "No record found" });
+            return res.send({ order, message: "Record updated" });
+        }).catch((err)=>{
+            res.status(500).json({success: false})
+        });
+
+        console.log(order.status);
+    }
+});
+
+//Update order status
+const deleteOrder = asyncHandler(async (req, res) => {
+    if (!req.user.isAdmin) {
+        return res.status(400).json({ message: "Unauthorized access" });
+    } else {
+        const order = await Order.findByIdAndRemove(req.params.id).then((order) => {
+            if (!order)
+                return res.status(400).json({ message: "No record found" });
+            return res.send({ message: "Record deleted" });
+        }).catch((err)=>{
+            res.status(500).json({success: false})
+        });
+
+        console.log(order.status);
+    }
+});
+//Total Sale
+const getTotalSales = asyncHandler(async (req, res)=>{
+    const totalSales = await Order.aggregate([{
+        $group:{ _id:null, totalsales: { $sum : '$totalPrice'}}
+    }]);
+
+    if (!totalSales)
+    return res.status(400).json({message: 'The order sales cannot be generated'});
+
+    res.send({totalSales: totalSales});
+})
+module.exports = { getOrders, getOrdersById, createOrder, updateOrderStatus, deleteOrder, getTotalSales };

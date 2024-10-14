@@ -4,6 +4,11 @@ const Category = require("../models/categoryModel");
 const asyncHandler = require("express-async-handler");
 const mongoose = require("mongoose");
 
+const prod = asyncHandler(async(req, res)=>{
+    const id = req.params.id;
+    return res.status(200).json({ message: id });
+})
+
 //Get All Products
 const getAllProducts = asyncHandler(async (req, res) => {
         
@@ -15,8 +20,8 @@ const getAllProducts = asyncHandler(async (req, res) => {
 
     //Select specific columns witho _id field
     const productList = await Product.find()
-        .populate("category")
-        .select("name description image images isFeatured");
+        .populate('category', 'name color')
+        .select("name description image images isFeatured price");
 
     if (!productList) return res.status(500).json({ message: "No products" });
 
@@ -205,5 +210,6 @@ module.exports = {
     deleteProduct,
     getProductCount,
     getFeaturedProduct,
-    getFilterProducts
+    getFilterProducts,
+    prod
 };
